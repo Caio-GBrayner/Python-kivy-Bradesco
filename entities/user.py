@@ -31,6 +31,10 @@ class User:
     def password(self, password):
         self.__password = password
 
+    @property
+    def created(self):
+        return self.__created
+
     def __str__(self):
         return f"Name:{self.__name} - E-mail: {self.__email} Password "
 
