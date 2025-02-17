@@ -1,8 +1,11 @@
+from datetime import datetime
+
 class User:
-    def __init__(self, name: str, email: str, password: int):
+    def __init__(self, name: str, email: str, password: int, created: None):
         self.__name = name
         self.__email = email
         self.__password = password
+        self.__created = created or self.get_current_date()
 
     @property
     def name(self):
@@ -30,3 +33,7 @@ class User:
 
     def __str__(self):
         return f"Name:{self.__name} - E-mail: {self.__email} Password "
+
+    @staticmethod
+    def get_current_date():
+        return datetime.now().strftime("%d/%m/%Y")
