@@ -1,7 +1,7 @@
 from datetime import datetime
 
 class User:
-    def __init__(self, name: str, email: str, password: int, created: None):
+    def __init__(self, name: str, email: str, password: str, created: None):
         self.__name = name
         self.__email = email
         self.__password = password
