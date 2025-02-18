@@ -1,6 +1,7 @@
 from entities import User
-class FileUserRepository:
+from repositories import IUserRepository
 
+class FileUserRepository(IUserRepository):
     def __init__(self, filename: str):
         self.__filename = filename
         self.__users = self._load_users()
@@ -11,8 +12,8 @@ class FileUserRepository:
                 users = {}
                 for line in file:
                     email, password, name, created = line.strip().split(";")
-                    users[email] = User(email, password, name, created = None)
-                    return users
+                    users[email] = User(email, password, name, created)
+                return users
         except FileNotFoundError:
             return {}
 
@@ -32,8 +33,9 @@ class FileUserRepository:
             raise ValueError("User not found")
         return self.__users[email]
 
-    def validate_user (self, email: str, password: str) -> bool:
-        user = self.get_user(email)
-        return user.password == password
-
-
+    def validate_user(self, email: str, password: str) -> bool:
+        try:
+            user = self.get_user(email)
+            return user.password == password
+        except ValueError:
+            return False

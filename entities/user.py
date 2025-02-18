@@ -1,12 +1,14 @@
 from datetime import datetime
 
 class User:
-    def __init__(self, name: str, email: str, password: str, created: None):
+    def __init__(self, name: str, email: str, password: str, created):
         self.__name = name
         self.__email = email
         self.__password = password
-        self.__created = created or self.get_current_date()
-
+        if created is None:
+            self.__created = self.get_current_date()
+        else:
+            self.__created = created
     @property
     def name(self):
         return self.__name
