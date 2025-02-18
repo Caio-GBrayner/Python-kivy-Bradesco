@@ -6,7 +6,6 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from repositories import FileUserRepository
 from services import UserService
-from datetime import datetime
 import os
 
 class CreateAccountWindow(Screen):
