@@ -7,7 +7,7 @@ if __name__ == "__main__":
     user_service = UserService(user_repository)
 
 
-    user_service.create_user("test@example.com", "password123", "Test User", "2023-10-01")
+    user_service.create_user("test@example.com", "password123", "Test User", "2023/12/10")
 
 
     print(user_service.login("test@example.com", "password123"))

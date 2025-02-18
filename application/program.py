@@ -6,6 +6,8 @@ from kivy.uix.popup import Popup
 from kivy.uix.label import Label
 from repositories import FileUserRepository
 from services import UserService
+from datetime import datetime
+import os
 
 class CreateAccountWindow(Screen):
     namee = ObjectProperty(None)
@@ -14,7 +16,7 @@ class CreateAccountWindow(Screen):
     created = ObjectProperty(None)
 
     def submit(self):
-        if user_service.create_user(self.email.text, self.password.text, self.namee.text, self.created.text):
+        if user_service.create_user(self.email.text, self.password.text, self.namee.text, None):
             self.reset()
             sm.current = "login"
         else:
@@ -27,7 +29,7 @@ class CreateAccountWindow(Screen):
 
     @staticmethod
     def show_popup(title, message):
-        popup = Popup(title=title, content=Label(text=message), size_hint=(None, None), size=(400, 400))
+        popup = Popup(title=title, content=Label(text=message), size_hint=(0.8, 0.4))
         popup.open()
 
 class LoginWindow(Screen):
@@ -38,32 +40,33 @@ class LoginWindow(Screen):
         if user_service.login(self.email.text, self.password.text):
             main_window = sm.get_screen('main')
             user_info = user_service.get_user_info(self.email.text)
-            main_window.n.text = user_info[1]
+            main_window.n.text = user_info.name  # Access the name attribute
             main_window.email.text = self.email.text
-            main_window.created.text = user_info[2]
+            main_window.created.text = user_info.created  # Access the created attribute
             sm.current = "main"
         else:
             self.show_popup("Error", "Invalid email or password")
 
     @staticmethod
     def show_popup(title, message):
-        popup = Popup(title=title, content=Label(text=message), size_hint=(None, None), size=(400, 400))
+        popup = Popup(title=title, content=Label(text=message), size_hint=(0.8, 0.4))
         popup.open()
 
 class MainWindow(Screen):
     n = ObjectProperty(None)
     created = ObjectProperty(None)
     email = ObjectProperty(None)
-    current = ""
 
 class WindowManager(ScreenManager):
     pass
 
-kv_path = "mnt/c/temp/Interface-python-bradesco/statics/layout.kv"
+# Construct paths relative to the script's directory
+base_dir = os.path.dirname(__file__)
+kv_path = os.path.join(base_dir, "statics", "layout.kv")
 kv = Builder.load_file(kv_path)
 
 sm = WindowManager()
-user_repository = FileUserRepository("mnt/c/temp/Interface-python-bradesco/users.txt")
+user_repository = FileUserRepository(os.path.join(base_dir, "users.txt"))
 user_service = UserService(user_repository)
 screens = [LoginWindow(name="login"), CreateAccountWindow(name="create"), MainWindow(name="main")]
 for screen in screens:
